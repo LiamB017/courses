@@ -7,6 +7,7 @@ class course {
   public $years;
   public $location;
   public $cao_points;
+  public $image_id;
  
 
   public function __construct() {
@@ -22,7 +23,7 @@ class course {
   }
 
   public static function findAll() {
-    $festivals = array();
+    $courses = array();
 
     try {
       // call DB() in DB.php to create a new database object - $db
@@ -57,6 +58,7 @@ class course {
           $course->location = $row['location'];
           $course->cao_points = $row['cao_points'];
           $course->years = $row['years'];
+          $course->image_id = $row['image_id'];
           
 
           // $festival now has all it's attributes assigned, so put it into the array $festivals[] 

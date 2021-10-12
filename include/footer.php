@@ -1,3 +1,3 @@
 <footer class="bg-light">
-  <h6>&copy; Music festivals</h6>
+  <h6>&copy; Courses</h6>
 </footer>

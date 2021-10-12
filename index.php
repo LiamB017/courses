@@ -23,7 +23,16 @@ $courses = course::findAll();
           <?php foreach ($courses as $course) { ?>
             <div class="col mb-4">
               <div class="card" style="width:15rem;">
-                <img src="<?= APP_URL ?>/assets/img/science.jpg" class="card-img-top" alt="...">
+              <?php
+                  // Use the image ID in festival, go to the Image table and get the image file name which includes the file location 
+                  $course_images = Image::findById($course->image_id);
+                  if ($course_images !== null) {
+                  ?>
+                    <!-- use the filename/location to display the correct image-->
+                    <img src="<?= APP_URL . "/" . $course_images->filename ?>" class="card-img-top" alt="...">
+                  <?php
+                  }
+                  ?>
                 <div class="card-body">
                   <h5 class="card-name"><?= $course->name ?></h5>
                   
