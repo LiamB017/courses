@@ -58,7 +58,10 @@ class course {
           $course->location = $row['location'];
           $course->cao_points = $row['cao_points'];
           $course->years = $row['years'];
+          $course->course_code = $row['course_code'];
+          $course->start_date = $row['start_date'];
           $course->image_id = $row['image_id'];
+
           
 
           // $festival now has all it's attributes assigned, so put it into the array $festivals[] 
@@ -80,7 +83,49 @@ class course {
   }
 
   public static function findById($id) {
-    throw new Exception("Not yet implemented");
+    $courses = null;
+
+    try {
+      $db = new DB();
+      $db->open();
+      $conn = $db->get_connection();
+
+      $select_sql = "SELECT * FROM course WHERE id = :id";
+      $select_params = [
+          ":id" => $id
+      ];
+      $select_stmt = $conn->prepare($select_sql);
+      $select_status = $select_stmt->execute($select_params);
+
+      if (!$select_status) {
+        $error_info = $select_stmt->errorInfo();
+        $message = "SQLSTATE error code = ".$error_info[0]."; error message = ".$error_info[2];
+        throw new Exception("Database error executing database query: " . $message);
+      }
+
+      if ($select_stmt->rowCount() !== 0) {
+        $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
+          
+        $course = new course();
+          $course->id = $row['id'];
+          $course->name = $row['name'];
+          $course->location = $row['location'];
+          $course->cao_points = $row['cao_points'];
+          $course->years = $row['years'];
+          $course->course_code = $row['course_code'];
+          $course->start_date = $row['start_date'];
+          $course->image_id = $row['image_id'];
+      }
+    }
+    finally {
+      if ($db !== null && $db->is_open()) {
+        $db->close();
+      }
+    }
+
+    return $course;
   }
+  
+  
 }
 ?>
