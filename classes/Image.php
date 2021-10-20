@@ -10,10 +10,7 @@ class image
     $this->id = null;
   }
 
-  public function save()
-  {
-    throw new Exception("Not yet implemented!");
-  }
+  
 
   public function delete()
   {

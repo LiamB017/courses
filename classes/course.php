@@ -1,25 +1,116 @@
 <?php
 // the class Festival defines the structure of what every festival object will look like. ie. each festival will have an id, title, description etc...
 // NOTE : For handiness I have the very same spelling as the database attributes
-class course {
+class Course {
   public $id;
   public $name;
   public $years;
   public $location;
   public $cao_points;
+  public $start_date;
+  public $course_code;
   public $image_id;
- 
+
+
 
   public function __construct() {
     $this->id = null;
   }
 
   public function save() {
-    throw new Exception("Not yet implemented");
+    try {
+      //Create the usual database connection - $conn
+      $db = new DB();
+      $db->open();
+      $conn = $db->get_connection();
+
+      $params = [
+        ":name" => $this->name,
+        ":years" => $this->years,
+        ":location" => $this->location,
+        ":start_date" => $this->start_date,
+        ":cao_points" => $this->cao_points,
+        ":course_code" => $this->course_code,
+        ":image_id" => $this->image_id
+      ];
+
+      // We will uncomment this code when we get to do the Create 
+      // If there is no ID yet, then it's a new festival being created for the first time
+      // if ($this->id === null) {
+      //   $sql = "INSERT INTO festivals (" .
+      //     "title, description, location, start_date, end_date, contact_name, contact_email, contact_phone, image_id" .
+      //     ") VALUES (" .
+      //     ":title, :description, :location, :start_date, :end_date, :contact_name, :contact_email, :contact_phone, :image_id" .
+      //     ")";
+      // } else {
+        // if there is an ID then it's an update for an existing festival in the database. 
+        $sql = "UPDATE course SET " .
+          "name = :name, " .
+          "years = :years, " .
+          "location = :location, " .
+          "cao_points = :cao_points, " .
+          "start_date = :start_date, " .
+          "course_code = :course_code, " .
+          "image_id = :image_id " .
+          "WHERE id = :id";
+        $params[":id"] = $this->id;
+    //  }
+
+
+      $stmt = $conn->prepare($sql);
+      $status = $stmt->execute($params);
+
+      if (!$status) {
+        $error_info = $stmt->errorInfo();
+        $message = "SQLSTATE error code = " . $error_info[0] . "; error message = " . $error_info[2];
+        throw new Exception("Database error executing database query: " . $message);
+      }
+
+      if ($stmt->rowCount() !== 1) {
+        throw new Exception("Failed to save course.");
+      }
+
+      //If the save() was a new festival created it won't have an ID
+      // so retrieve the ID assigned by the DB. - remember auto_increment in the Database for assigning primary keys
+      // if ($this->id === null) {
+      //   $this->id = $conn->lastInsertId();
+      // }
+    } finally {
+      if ($db !== null && $db->is_open()) {
+        $db->close();
+      }
+    }
   }
 
   public function delete() {
-    throw new Exception("Not yet implemented");
+    try {
+      /*Create connection.*/
+      $db = new DB();
+      $db->open();
+      $conn = $db->get_connection();
+
+      $sql = "DELETE FROM course WHERE id = :id";
+      $params = [
+        ":id" => $this->id
+      ];
+
+      $stmt = $conn->prepare($sql);
+      $status = $stmt->execute($params);
+
+      if (!$status) {
+        $error_info = $stmt->errorInfo();
+        $message = "SQLSTATE error code = " . $error_info[0] . "; error message = " . $error_info[2];
+        throw new Exception("Database error executing database query: " . $message);
+      }
+
+      if ($stmt->rowCount() !== 1) {
+        throw new Exception("Failed to delete course.");
+      }
+    } finally {
+      if ($db !== null && $db->is_open()) {
+        $db->close();
+      }
+    }
   }
 
   public static function findAll() {
@@ -52,17 +143,15 @@ class course {
         $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
         while ($row !== FALSE) {
           // Create $festival object, then put the id, title, description, location etc into $festival
-          $course = new course();
+          $course = new Course();
           $course->id = $row['id'];
           $course->name = $row['name'];
+          $course->years = $row['years'];
           $course->location = $row['location'];
           $course->cao_points = $row['cao_points'];
-          $course->years = $row['years'];
-          $course->course_code = $row['course_code'];
           $course->start_date = $row['start_date'];
+          $course->course_code = $row['course_code'];
           $course->image_id = $row['image_id'];
-
-          
 
           // $festival now has all it's attributes assigned, so put it into the array $festivals[] 
           $courses[] = $course;
@@ -83,7 +172,7 @@ class course {
   }
 
   public static function findById($id) {
-    $courses = null;
+    $course = null;
 
     try {
       $db = new DB();
@@ -106,15 +195,15 @@ class course {
       if ($select_stmt->rowCount() !== 0) {
         $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
           
-        $course = new course();
-          $course->id = $row['id'];
-          $course->name = $row['name'];
-          $course->location = $row['location'];
-          $course->cao_points = $row['cao_points'];
-          $course->years = $row['years'];
-          $course->course_code = $row['course_code'];
-          $course->start_date = $row['start_date'];
-          $course->image_id = $row['image_id'];
+        $course = new Course();
+        $course->id = $row['id'];
+        $course->name = $row['name'];
+        $course->years = $row['years'];
+        $course->location = $row['location'];
+        $course->cao_points = $row['cao_points'];
+        $course->start_date = $row['start_date'];
+        $course->course_code = $row['course_code'];
+        $course->image_id = $row['image_id'];
       }
     }
     finally {
@@ -125,7 +214,7 @@ class course {
 
     return $course;
   }
-  
+
   
 }
 ?>

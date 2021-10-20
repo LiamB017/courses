@@ -67,12 +67,12 @@ try {
               <!--Disabled so the user can't intereact. This form is for viewing only.-->
               <div class="form-group">
                 <label class="labelHidden" for="ticketPrice">Name</label>
-                <input placeholder="Title" type="text" id="name" class="form-control" value="<?= $course->name ?>" disabled />
+                <input placeholder="name" type="text" id="name" class="form-control" value="<?= $course->name ?>" disabled />
               </div>
 
               <div class="form-group">
                 <label class="labelHidden" for="date">CAO Points</label>
-                <textarea name="description" rows="3" id="cao_points" class="form-control" disabled><?= $course->cao_points ?></textarea>
+                <textarea name="cao_points" rows="3" id="cao_points" class="form-control" disabled><?= $course->cao_points ?></textarea>
               </div>
               <div class="form-group">
                 <label class="labelHidden" for="date">Location</label>
@@ -80,18 +80,18 @@ try {
               </div>
               <div class="form-group">
                 <label class="labelHidden" for="date">Years</label>
-                <textarea name="location" rows="3" id="years" class="form-control" disabled><?= $course->years ?></textarea>
+                <textarea name="years" rows="3" id="years" class="form-control" disabled><?= $course->years ?></textarea>
               </div>
               
 
               <div class="form-group">
                 <label class="labelHidden" for="venueDescription">Course Code</label>
-                <input placeholder="Course Code" type="text" id="course_code" class="form-control" value="<?= $course->course_code ?>" disabled />
+                <input placeholder="course_code" type="text" id="course_code" class="form-control" value="<?= $course->course_code ?>" disabled />
               </div>
 
               <div class="form-group">
                 <label class="labelHidden" for="venueDescription">Start Date</label>
-                <input placeholder="Contact Email" type="email" id="contactEmail" class="form-control" value="<?= $course->start_date ?>" disabled />
+                <input placeholder="start_date" type="email" id="contactEmail" class="form-control" value="<?= $course->start_date ?>" disabled />
               </div>
 
               
@@ -113,8 +113,8 @@ try {
 
               <div class="form-group">
                 <a class="btn btn-default" href="<?= APP_URL ?>/home.php">Cancel</a>
-                <button class="btn btn-warning" formaction="<?= APP_URL ?>/festival-edit.php">Edit</button>
-                <button class="btn btn-danger btn-festival-delete" formaction="<?= APP_URL ?>/festival-delete.php">Delete</button>
+                <button class="btn btn-warning" formaction="<?= APP_URL ?>/course-edit.php">Edit</button>
+                <button class="btn btn-danger btn-course-delete" formaction="<?= APP_URL ?>/course-delete.php">Delete</button>
               </div>
             </form>
           </div>
